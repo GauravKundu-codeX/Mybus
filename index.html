@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chitkara University - Transport Portal</title>
+<style>
+  :root{
+    --red:#c8202f;
+    --dark-red:#a91b28;
+    --green:#2e7d32;
+    --bg:#eef1f5;
+    --card-bg:#ffffff;
+    --text-dark:#1a1a1a;
+    --text-muted:#666;
+    --border:#e6e6e6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    background:#3a3a3a;
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+  }
+  .phone{
+    width:100%;
+    max-width:421px;
+    min-height:100vh;
+    background:var(--bg);
+    border:8px solid #1a1a1a;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* Header */
+  .header{
+    background:var(--bg);
+    padding:14px 16px 10px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .header .logo-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .header .chitkara-logo{
+    width:171px;
+    height:57px;
+    display:block;
+    object-fit:contain;
+  }
+  .refresh-btn{
+    position:absolute;
+    right:16px;
+    top:18px;
+    color:var(--red);
+    font-size:20px;
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .back-btn{
+    position:absolute;
+    left:16px;
+    top:18px;
+    color:var(--red);
+    font-size:20px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    display:none;
+  }
+  .page[data-page]:not([data-page="home"]):not([data-page="login"]) .back-btn{display:block;}
+
+  /* Profile card */
+  .profile-card{
+    background:var(--card-bg);
+    margin:10px 12px 0 12px;
+    border-radius:6px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-left:4px solid var(--red);
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+  }
+  .profile-pic{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:#d9d9d9;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;color:#888;
+    text-align:center;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .profile-info{
+    line-height:1.4;
+  }
+  .profile-info .hi-name{
+    font-weight:700;
+    font-size:15px;
+    color:#1a1a1a;
+  }
+  .profile-info .sub{
+    font-size:13px;
+    color:#333;
+  }
+  .profile-info .id{
+    font-size:13px;
+    color:#333;
+  }
+
+  /* Menu card (home) */
+  .menu-card{
+    background:var(--card-bg);
+    margin:12px 12px 0 12px;
+    border-radius:6px;
+    padding:14px 14px 6px 14px;
+    border-left:4px solid var(--green);
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    flex:1;
+  }
+  .menu-item{
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:12px 14px;
+    margin-bottom:12px;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .menu-item:hover{
+    background:#fafafa;
+  }
+  .menu-item .title{
+    color:var(--red);
+    font-weight:600;
+    font-size:15px;
+    text-decoration:underline;
+    margin-bottom:3px;
+  }
+  .menu-item .desc{
+    color:#333;
+    font-size:12.5px;
+    line-height:1.4;
+  }
+
+  /* Content card (green border, generic) */
+  .content-card{
+    background:var(--card-bg);
+    margin:12px 12px 0 12px;
+    border-radius:6px;
+    padding:16px;
+    border-left:4px solid var(--green);
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    flex:1;
+  }
+  .content-card.no-side-border{
+    border-left:none;
+    padding-left:16px;
+  }
+  .content-card h2{
+    font-size:22px;
+    font-weight:400;
+    color:#1a1a1a;
+    margin-bottom:18px;
+    letter-spacing:0;
+  }
+
+  /* Payment receipt items */
+  .receipt-item{
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    gap:6px;
+  }
+  .receipt-item:last-child{border-bottom:none;}
+  .receipt-left{
+    flex:1;
+  }
+  .receipt-left .period{
+    color:var(--red);
+    font-weight:400;
+    font-size:12px;
+    margin-bottom:8px;
+  }
+  .receipt-left .route-info{
+    font-size:11.5px;
+    color:#1a1a1a;
+    font-weight:400;
+    line-height:1.5;
+    margin-bottom:9px;
+  }
+  .receipt-left .fee-line{
+    font-size:11.5px;
+    font-weight:400;
+    color:#1a1a1a;
+    line-height:1.65;
+  }
+  .receipt-left .fee-line b{font-weight:700;}
+  .receipt-left .paid{color:var(--green);font-weight:700;}
+  .receipt-left .due{color:var(--red);font-weight:700;}
+  .receipt-left .valid{
+    font-size:11.5px;
+    font-weight:400;
+    color:#1a1a1a;
+    margin-top:9px;
+  }
+  .receipt-left .valid b{color:var(--red);font-weight:700;}
+  .receipt-right{
+    text-align:right;
+    flex-shrink:0;
+  }
+  .receipt-right .amount{
+    font-weight:700;
+    font-size:12px;
+    color:#1a1a1a;
+  }
+  .receipt-right .status{
+    color:var(--green);
+    font-weight:400;
+    font-size:11.5px;
+    margin:5px 0;
+  }
+  .receipt-right .txn{
+    font-size:10.5px;
+    font-weight:400;
+    color:#1a1a1a;
+    word-break:break-all;
+    line-height:1.45;
+  }
+  .receipt-right .date{
+    font-size:10.5px;
+    font-weight:400;
+    color:#1a1a1a;
+    margin-top:5px;
+    line-height:1.45;
+  }
+
+  /* Fine dues tables */
+  .fine-section h3{
+    font-size:15px;
+    font-weight:700;
+    color:#1a1a1a;
+    margin:16px 0 8px 0;
+  }
+  .fine-section h3:first-child{margin-top:0;}
+  table.fine-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  table.fine-table thead th{
+    background:#e9e9e9;
+    padding:10px 6px;
+    text-align:left;
+    font-weight:600;
+    color:#333;
+  }
+  table.fine-table tbody td{
+    padding:14px 6px;
+    text-align:center;
+    color:var(--red);
+    border-bottom:1px solid var(--border);
+  }
+  .notice-red{
+    background:var(--red);
+    color:#fff;
+    padding:12px 14px;
+    border-radius:4px;
+    font-size:13px;
+    margin-top:16px;
+    line-height:1.4;
+  }
+
+  /* Generic simple content */
+  .simple-text{
+    font-size:14px;
+    color:#333;
+    line-height:1.7;
+  }
+  .route-list-item{
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .route-list-item .rname{
+    font-weight:600;
+    font-size:13.5px;
+    color:#1a1a1a;
+  }
+  .route-list-item button{
+    background:var(--red);
+    color:#fff;
+    border:none;
+    padding:6px 14px;
+    border-radius:4px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  select, input[type=text]{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:4px;
+    font-size:13.5px;
+    margin-bottom:14px;
+    color:#333;
+  }
+  label{
+    font-size:13px;
+    font-weight:600;
+    color:#333;
+    display:block;
+    margin-bottom:6px;
+  }
+  .submit-btn{
+    background:var(--red);
+    color:#fff;
+    border:none;
+    padding:12px;
+    width:100%;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+  }
+
+  /* Bottom nav */
+  .bottom-nav{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    background:var(--bg);
+    border-top:1px solid #ddd;
+    padding:8px 0 10px 0;
+    margin-top:auto;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+    color:#999;
+    font-size:11px;
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .nav-item.active{color:var(--red);}
+  .nav-item svg{width:22px;height:22px;}
+
+  .page{display:none;flex-direction:column;flex:1;position:relative;}
+  .page.active{display:flex;}
+
+  .scroll-body{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:12px;
+  }
+
+  /* ===================== LOGIN PAGE ===================== */
+  .login-wrap{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:48px 28px 0 28px;
+  }
+  .login-logo-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-bottom:6px;
+  }
+  .login-u{
+    font-size:110px;
+    font-weight:900;
+    color:var(--red);
+    line-height:0.75;
+    font-family:'Arial Black', Arial, sans-serif;
+    transform:scaleY(1.15);
+  }
+  .login-bus{
+    font-size:38px;
+    font-weight:900;
+    color:#111;
+    letter-spacing:1px;
+    margin-top:8px;
+    font-family:'Arial Black', Arial, sans-serif;
+  }
+  .login-campus{
+    font-size:14px;
+    font-weight:700;
+    color:#222;
+    letter-spacing:2.5px;
+    margin:22px 0 26px 0;
+  }
+  .login-form{
+    width:100%;
+    height: 50px;
+  }
+  .input-group{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#fff;
+    border-radius:8px;
+    padding:13px 16px;
+    margin-bottom:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  .input-group svg{
+    width:18px;height:18px;
+    color:#8a8a8a;
+    flex-shrink:0;
+  }
+  .input-group input{
+    border:none;
+    outline:none;
+    flex:1;
+    font-size:14.5px;
+    color:#222;
+    background:transparent;
+  }
+  .input-group input::placeholder{
+    color:#9a9a9a;
+  }
+  .login-error{
+    color:var(--red);
+    font-size:12.5px;
+    text-align:center;
+    min-height:16px;
+    margin:-6px 0 8px 0;
+    font-weight:600;
+  }
+  .login-btn{
+    width:100%;
+    background:var(--red);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(200,32,47,0.35);
+  }
+  .login-btn:active{background:var(--dark-red);}
+  .login-forgot{
+    text-align:center;
+    margin-top:16px;
+    font-size:12.5px;
+    color:#222;
+  }
+  .login-forgot a{color:#222;text-decoration:none;}
+  .login-contact{
+    text-align:center;
+    margin-top:14px;
+    font-size:12px;
+    color:#555;
+  }
+  .login-contact a{
+    color:#1a56c4;
+    text-decoration:none;
+  }
+  .login-copyright{
+    text-align:center;
+    margin-top:10px;
+    font-size:11.5px;
+    color:#777;
+  }
+  .login-footer{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    padding:24px 20px 70px 20px;
+    font-size:11.5px;
+  }
+  .login-footer a{
+    color:#1a56c4;
+    text-decoration:none;
+  }
+  .login-footer span{
+    color:#bbb;
+  }
+  .recaptcha-mock{
+    position:absolute;
+    bottom:10px;
+    right:-6px;
+    background:#fff;
+    box-shadow:0 1px 6px rgba(0,0,0,0.25);
+    border-radius:4px;
+    padding:10px 22px 10px 10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .recaptcha-mock .rc-icon{
+    width:26px;height:26px;
+    color:#8a8a8a;
+  }
+  .recaptcha-mock .rc-text{
+    font-size:9.5px;
+    color:#666;
+    line-height:1.2;
+    max-width:60px;
+  }
+  .recaptcha-strip{
+    position:absolute;
+    bottom:0;
+    right:0;
+    width:6px;
+    height:56px;
+    background:#4285f4;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ============ LOGIN PAGE ============ -->
+  <div class="page active" data-page="login">
+    <div class="login-wrap">
+      <div class="login-logo-wrap">
+        <div class="login-u">U</div>
+        <div class="login-bus">BUS</div>
+      </div>
+      <div class="login-campus">PUNJAB CAMPUS</div>
+
+      <div class="login-form">
+        <div class="input-group">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+          <input type="text" id="loginUsername" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <input type="password" id="loginPassword" placeholder="Password" autocomplete="off">
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button class="login-btn" onclick="attemptLogin()">Sign In</button>
+        <div class="login-forgot"><a href="#" onclick="return false;">Forgot your password? Click here</a></div>
+        <div class="login-contact">Questions? Email us at <a href="mailto:ubus@chitkara.edu.in">ubus@chitkara.edu.in</a></div>
+        <div class="login-copyright">Copyright &copy;2026 Chitkara University</div>
+      </div>
+    </div>
+
+    <div class="login-footer">
+      <a href="#">About Us</a><span>|</span>
+      <a href="#">Contact Us</a><span>|</span>
+      <a href="#">Terms &amp; Conditions</a><span>|</span>
+      <a href="#">Refund &amp; Cancellation</a><span>|</span>
+      <a href="#">Privacy Policy</a>
+    </div>
+
+    <div class="recaptcha-mock">
+      <svg class="rc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+      <div class="rc-text">reCAPTCHA</div>
+    </div>
+    <div class="recaptcha-strip"></div>
+  </div>
+
+  <!-- ============ HOME PAGE ============ -->
+  <div class="page" data-page="home">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="menu-card">
+        <div class="menu-item" onclick="showPage('receipt')">
+          <div class="title">Payment Receipt</div>
+          <div class="desc">Payment Transaction Receipt</div>
+        </div>
+        <div class="menu-item" onclick="showPage('nondisciplinary')">
+          <div class="title">Non-Disciplinary Action</div>
+          <div class="desc">Extra Dues for Non-Disciplinary Action</div>
+        </div>
+        <div class="menu-item" onclick="showPage('allotment')">
+          <div class="title">Transport Allotment</div>
+          <div class="desc">Students can avail the University Transport subject to the availability of seats and/or stoppage.</div>
+        </div>
+        <div class="menu-item" onclick="showPage('routes')">
+          <div class="title">Transport Routes</div>
+          <div class="desc">Click To Download and View Bus routes</div>
+        </div>
+        <div class="menu-item" onclick="showPage('cancellation')">
+          <div class="title">Route Cancellation</div>
+          <div class="desc">Route Cancellation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ PAYMENT RECEIPT PAGE ============ -->
+  <div class="page" data-page="receipt">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Payment Receipt</h2>
+
+        <div class="receipt-item">
+          <div class="receipt-left">
+            <div class="period">JUL-JUNE 2026-27</div>
+            <div class="route-info">
+              PANCHKULA/MANIMAJRA<br>
+              SECTOR 11/4 DIVIDING<br>
+              ROUTE NO 49
+            </div>
+            <div class="fee-line">Bus Fee: 48000</div>
+            <div class="fee-line">Due Amount: <b class="due">48000</b></div>
+            <div class="fee-line">Paid Amount: <b class="paid">48000</b></div>
+            <div class="valid">Valid Upto <b>30-JUN-2027</b></div>
+          </div>
+          <div class="receipt-right">
+            <div class="amount">Rs. 48000</div>
+            <div class="status">success</div>
+            <div class="txn">UT42850</div>
+            <div class="txn">pay_T7uOvxaB5viB9C</div>
+            <div class="date">30-Jun-2026<br>09:58:20 PM</div>
+          </div>
+        </div>
+
+        <div class="receipt-item">
+          <div class="receipt-left">
+            <div class="period">JUL-JUN 2025-26</div>
+            <div class="route-info">
+              PANCHKULA/MANIMAJRA<br>
+              SECTOR 11/4 DIVIDING<br>
+              ROUTE NO 49
+            </div>
+            <div class="fee-line">Bus Fee: 44000</div>
+            <div class="fee-line">Due Amount: <b class="due">45700</b></div>
+            <div class="fee-line">Paid Amount: <b class="paid">45700</b></div>
+            <div class="valid">Valid Upto <b>30-JUN-2026</b></div>
+          </div>
+          <div class="receipt-right">
+            <div class="amount">Rs. 45700</div>
+            <div class="status">success</div>
+            <div class="txn">UT31662</div>
+            <div class="txn">pay_QktaOThxEJIf0P</div>
+            <div class="date">24-Jun-2025<br>09:37:15 AM</div>
+          </div>
+        </div>
+
+        <div class="receipt-item">
+          <div class="receipt-left">
+            <div class="period">JUL-JUN 2024-25</div>
+            <div class="route-info">
+              PANCHKULA/MANIMAJRA<br>
+              SECTOR 11/4 DIVIDING<br>
+              ROUTE NO 49
+            </div>
+            <div class="fee-line">Bus Fee: 41000</div>
+            <div class="fee-line">Due Amount: <b class="due">41000</b></div>
+            <div class="fee-line">Paid Amount: <b class="paid">41000</b></div>
+            <div class="valid">Valid Upto <b>30-JUN-2025</b></div>
+          </div>
+          <div class="receipt-right">
+            <div class="amount">Rs. 41000</div>
+            <div class="status">success</div>
+            <div class="txn">UT23903</div>
+            <div class="txn">pay_OiJce1R6g5UZuu</div>
+            <div class="date">08-Aug-2024<br>12:31:47 PM</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ NON-DISCIPLINARY (FINE DUES) PAGE ============ -->
+  <div class="page" data-page="nondisciplinary">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="fine-section">
+          <h3>Fine Dues</h3>
+          <table class="fine-table">
+            <thead>
+              <tr><th>#</th><th>Date</th><th>Reason</th><th>Amount</th></tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="4">Data Not Found</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Fine Paid</h3>
+          <table class="fine-table">
+            <thead>
+              <tr><th>#</th><th>Date</th><th>Receipt No.</th><th>Paid Amount</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="5">Data Not Found</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="notice-red"># Please contact Transport Office for route alloatment and payment</div>
+        <div class="notice-red">If the payment gateway confirms that your payment was successful, please allow up to 24 hours (or 48 hours during holidays) to receive your receipt. For any unsuccessful transactions, kindly contact your bank or credit card company.</div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ TRANSPORT ALLOTMENT PAGE ============ -->
+  <div class="page" data-page="allotment">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Transport Allotment</h2>
+        <p class="simple-text" style="margin-bottom:16px;">Students can avail the University Transport subject to the availability of seats and/or stoppage. Select your preferred route below to request allotment.</p>
+
+        <label>Select Route</label>
+        <select>
+          <option>PANCHKULA/MANIMAJRA - SECTOR 11/4 DIVIDING - ROUTE NO 49</option>
+          <option>ZIRAKPUR - ROUTE NO 12</option>
+          <option>MOHALI PHASE 3B2 - ROUTE NO 27</option>
+        </select>
+
+        <label>Boarding Point</label>
+        <select>
+          <option>Sector 11/4 Dividing</option>
+          <option>Sector 8 Chowk</option>
+        </select>
+
+        <button class="submit-btn">Submit Request</button>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ TRANSPORT ROUTES PAGE ============ -->
+  <div class="page" data-page="routes">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Transport Routes</h2>
+        <div class="route-list-item">
+          <span class="rname">Route 49 - Panchkula/Manimajra</span>
+          <button>Download</button>
+        </div>
+        <div class="route-list-item">
+          <span class="rname">Route 12 - Zirakpur</span>
+          <button>Download</button>
+        </div>
+        <div class="route-list-item">
+          <span class="rname">Route 27 - Mohali Phase 3B2</span>
+          <button>Download</button>
+        </div>
+        <div class="route-list-item">
+          <span class="rname">Route 05 - Sector 20 Panchkula</span>
+          <button>Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ ROUTE CANCELLATION PAGE ============ -->
+  <div class="page" data-page="cancellation">
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">&#8592;</button>
+      <div class="logo-wrap">
+        <img class="chitkara-logo" alt="Chitkara University">
+      </div>
+      <button class="refresh-btn" onclick="location.reload()">&#8635;</button>
+    </div>
+
+    <div class="scroll-body">
+      <div class="profile-card">
+        <div class="profile-pic">ProfilePic</div>
+        <div class="profile-info">
+          <div class="hi-name">Hi, GAURAV KUNDU</div>
+          <div class="sub">GAI DEV KUNDU</div>
+          <div class="id">2410990283</div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Route Cancellation</h2>
+        <p class="simple-text" style="margin-bottom:16px;">Currently allotted route: <b>PANCHKULA/MANIMAJRA - ROUTE NO 49</b></p>
+
+        <label>Reason for Cancellation</label>
+        <select>
+          <option>Change of residence</option>
+          <option>Using personal transport</option>
+          <option>Other</option>
+        </select>
+
+        <label>Remarks</label>
+        <input type="text" placeholder="Enter remarks (optional)">
+
+        <button class="submit-btn">Request Cancellation</button>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goHome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h2M11 10h2M15 10h2M7 14h10"/></svg>
+        Change Password
+      </button>
+      <button class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        Notification
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var CHITKARA_LOGO = "data:image/png;base64,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";
+
+  document.querySelectorAll('.chitkara-logo').forEach(function(img){
+    img.src = CHITKARA_LOGO;
+  });
+
+  var VALID_ID = "2550981562";
+
+  function attemptLogin(){
+    var u = document.getElementById('loginUsername').value.trim();
+    var p = document.getElementById('loginPassword').value.trim();
+    var errBox = document.getElementById('loginError');
+    if(u === VALID_ID && p === VALID_ID){
+      errBox.textContent = '';
+      showPage('home');
+    } else {
+      errBox.textContent = 'Invalid Username or Password';
+    }
+  }
+
+  document.getElementById('loginUsername').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ attemptLogin(); }
+  });
+  document.getElementById('loginPassword').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ attemptLogin(); }
+  });
+
+  function showPage(name){
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelector('.page[data-page="' + name + '"]').classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function goHome(){
+    showPage('home');
+  }
+</script>
+
+</body>
+</html>
