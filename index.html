@@ -17,6 +17,7 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{font-size:16px; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
   body{
     font-family:"Segoe UI", Roboto, Arial, sans-serif;
     background:var(--bg);
@@ -587,8 +588,42 @@
     .shell{margin-bottom:56px;}
   }
 
-  @media (max-width: 420px){
-    .login-title{font-size:26px;}
+  @media (max-width: 480px){
+    .login-page{
+      padding-top:28px;
+      padding-bottom:20px;
+    }
+    .login-inner{
+      max-width:92vw;
+    }
+    .login-red-u{
+      font-size:clamp(4.2rem, 22vw, 7.4rem);
+      letter-spacing:-0.08em;
+      margin-bottom:10px;
+      padding-bottom:0;
+    }
+    .login-title{
+      font-size:clamp(2.3rem, 11vw, 3.8rem);
+      margin-bottom:4px;
+    }
+    .login-sub{
+      font-size:1rem;
+      margin-bottom:20px;
+      letter-spacing:0.08em;
+    }
+    .login-form{max-width:100%;}
+    .input-wrap{
+      padding:1rem 0.9rem;
+      margin-bottom:0.9rem;
+    }
+    .input-wrap input{font-size:1rem;}
+    .btn-signin{
+      padding:0.95rem 1rem;
+      font-size:1.05rem;
+    }
+    .forgot, .contact-line, .copyright, .login-footer-links{
+      font-size:0.78rem;
+    }
     .profile-info .hi{font-size:16px;}
     .brand-text{font-size:12px;}
   }
